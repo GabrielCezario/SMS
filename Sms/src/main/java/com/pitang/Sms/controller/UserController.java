@@ -1,5 +1,6 @@
 package com.pitang.Sms.controller;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, path = "/addUser")
-	public UserDto addUser(UserDto userDto) {
+	public UserDto addUser(@RequestBody UserDto userDto) {
 		
 		UserModel userModel = ModelMapperComponent.modelMapper.map(userDto, UserModel.class);
 		ModelMapperComponent.modelMapper.validate();
