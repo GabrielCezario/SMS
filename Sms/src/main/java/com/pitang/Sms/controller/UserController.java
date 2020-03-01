@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.modelmapper.TypeToken;
+
 import com.pitang.Sms.dto.UserDto;
 import com.pitang.Sms.mapper.ModelMapperComponent;
 import com.pitang.Sms.model.UserModel;
 import com.pitang.Sms.service.UserService;
 
 @RestController
+@RequestMapping("user")
 public class UserController {
 	
 	private UserService userService;
