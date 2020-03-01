@@ -1,5 +1,7 @@
 package com.pitang.Sms.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +23,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, path = "/addUser")
-	public UserDto addUser(@RequestBody UserDto userDto) {
-		
+	public ResponseEntity<?> addUser(@RequestBody UserDto userDto) {
 		UserModel userModel = ModelMapperComponent.modelMapper.map(userDto, UserModel.class);
 		ModelMapperComponent.modelMapper.validate();
 		
@@ -30,8 +31,8 @@ public class UserController {
 		
 		userDto = ModelMapperComponent.modelMapper.map(userModel, UserDto.class);
 		ModelMapperComponent.modelMapper.validate();
-		
-		return userDto;
+				
+		return new ResponseEntity<>(userDto, HttpStatus.OK);
 	}
 
 }
