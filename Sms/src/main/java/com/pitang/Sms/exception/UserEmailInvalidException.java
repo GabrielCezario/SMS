@@ -1,6 +1,6 @@
 package com.pitang.Sms.exception;
 
-public class UserEmailInvalidException extends Exception{
+public class UserEmailInvalidException extends RuntimeException{
 	
 	private boolean emailInvalid;
 

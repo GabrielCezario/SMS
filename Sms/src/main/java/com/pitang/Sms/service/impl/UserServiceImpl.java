@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.pitang.Sms.exception.UserEmailInvalidException;
@@ -14,6 +15,7 @@ import com.pitang.Sms.model.UserModel;
 import com.pitang.Sms.repository.UserModelRepository;
 import com.pitang.Sms.service.UserService;
 
+@Service
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
@@ -24,37 +26,34 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserModel addUser(UserModel userModel) {
 		
-		UserEmailInvalidException userEmailInvalidException = verifyEmail(userModel.getEmail());
-		UserInvalidException userInvalidException = verifyUser(userModel);
-		UserEmptyFieldsException userEmptyFieldsException = verifyEmptyFields(userModel);
+		verifyEmail(userModel.getEmail());
+		verifyUser(userModel);
+		verifyEmptyFields(userModel);
 		
-		if (userEmailInvalidException == null &&
-			userInvalidException == null && 
-			userEmptyFieldsException == null) {
-			
-			return userModelRepository.save(userModel);
-			
-		} else {
-			return null;
-		}
-		
+		return userModelRepository.save(userModel);
 	}
 	
 	@Override
 	public UserModel findUserByName(String userName) {
-		return null;
+		return userModelRepository.findByUserName(userName);
 	}
 	
 	@Override
-	public List<UserModel> lisUsers() {
-		
-		return null;
+	public List<UserModel> listUsers() {
+		return userModelRepository.findAll();
 	}
 	
 	@Override
-	public UserModel updateUser(UserModel userModel) {
+	public UserModel updateUser(Long id, UserModel userModel) {
 		
-		return null;
+		verifyEmail(userModel.getEmail());
+		verifyUser(userModel);
+		verifyEmptyFields(userModel);
+		
+		UserModel userdb = userModelRepository.findById(id).get();
+		UserModel userModified = changeUser(userModel, userdb);
+		
+		return userModelRepository.save(userModified);
 	}
 	
 	@Override
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService{
 	
 	//Private methods
 	
-	private UserEmailInvalidException verifyEmail(String email) {
+	private void verifyEmail(String email) {
 		
 		UserEmailInvalidException userEmailInvalidException = null;
 		
@@ -82,10 +81,13 @@ public class UserServiceImpl implements UserService{
 			}
 		}
 		
-		return userEmailInvalidException;
+		if (userEmailInvalidException != null) {
+			throw new UserEmailInvalidException();
+		} 
+		
 	}
 	
-	private UserInvalidException verifyUser(UserModel userModel) {
+	private void verifyUser(UserModel userModel) {
 		
 		UserInvalidException userInvalidException = null;
 		
@@ -98,7 +100,9 @@ public class UserServiceImpl implements UserService{
 			
 		}
 		
-		return userInvalidException;
+		if (userInvalidException != null) {
+			throw new UserInvalidException();
+		} 
 		
 	}
 	
@@ -106,7 +110,7 @@ public class UserServiceImpl implements UserService{
 		
 	}
 	
-	private UserEmptyFieldsException verifyEmptyFields(UserModel userModel){
+	private void verifyEmptyFields(UserModel userModel){
 		
 		UserEmptyFieldsException userEmptyFieldsException = null;
 		
@@ -142,8 +146,21 @@ public class UserServiceImpl implements UserService{
 			userEmptyFieldsException.setPasswordIsEmpty(true);
 		}
 		
-		return userEmptyFieldsException;
+		if (userEmptyFieldsException != null) {
+			throw new UserEmptyFieldsException();
+		} 
 		
+	}
+	
+	private UserModel changeUser(UserModel model1, UserModel model2) {
+		
+		model2.setUserName(model1.getUserName());
+		model2.setFirstName(model1.getFirstName());
+		model2.setLastName(model1.getLastName());
+		model2.setEmail(model1.getEmail());
+		model2.setPassword(model2.getPassword());
+		
+		return model2;
 	}
 
 }

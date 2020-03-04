@@ -1,6 +1,6 @@
 package com.pitang.Sms.exception;
 
-public class UserEmptyFieldsException extends Exception{
+public class UserEmptyFieldsException extends RuntimeException{
 	
 	private boolean userNameIsEmpty;
 	private boolean firstNameIsEmpty;

@@ -6,11 +6,11 @@ import com.pitang.Sms.model.UserModel;
 
 public interface UserService {
 	
-	public UserModel findUserByName(String userName);
 	public UserModel addUser(UserModel userModel);
-	public UserModel updateUser(UserModel userModel);
+	public UserModel findUserByName(String userName);
+	public UserModel updateUser(Long id, UserModel userModel);
 	public void deleteUser(long id);
 	
-	public List<UserModel> lisUsers();
+	public List<UserModel> listUsers();
 
 }

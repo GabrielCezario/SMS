@@ -6,6 +6,6 @@ import com.pitang.Sms.model.UserModel;
 
 public interface UserModelRepository extends JpaRepository<UserModel, Long>{
 	
-	
+	public UserModel findByUserName(String name);
 
 }
