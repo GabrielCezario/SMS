@@ -98,6 +98,10 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, path = "/loginUser")
+	public ResponseEntity<?> loginUser(@RequestBody String login, @RequestBody String password){		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 
 }
