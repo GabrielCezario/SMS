@@ -24,20 +24,20 @@ public class TokenAuthenticationService {
 	static final String TOKEN_PREFIX = "bearer";
 	static final String HEADER_STRING = "Authorization";
 	
-	public String generateToken(UserModel userModel) {
+	public static String generateToken(String id) {
 		
 		String JWT = Jwts.builder()
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setSubject("teste JWT")
+				.setSubject(id)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
 		
 		return JWT;
 	}
 	
-	static void addAuthentication(HttpServletResponse response, String userName) {
+	static void addAuthentication(HttpServletResponse response, String idUser) {
 		
-		String JWT = Jwts.builder().setSubject(userName)
+		String JWT = Jwts.builder().setSubject(idUser)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
 				.compact();

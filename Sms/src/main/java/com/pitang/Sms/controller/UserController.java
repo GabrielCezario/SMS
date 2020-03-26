@@ -15,6 +15,7 @@ import com.pitang.Sms.dto.UserDto;
 import com.pitang.Sms.mapper.ModelMapperComponent;
 import com.pitang.Sms.model.UserModel;
 import com.pitang.Sms.service.UserService;
+import com.pitang.Sms.service.impl.TokenAuthenticationService;
 
 @RestController
 @RequestMapping("user")
@@ -29,6 +30,27 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, path = "/hwu" )
 	public String hwu() {
 		return "Hello World! USER!";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/login/{email}/{password}")
+	public ResponseEntity<?> login(@PathVariable("email") String email, @PathVariable("password") String password){
+		
+		UserModel userModel = userService.findUserByEmail(email);
+		
+		if (email.equalsIgnoreCase(userModel.getEmail()) && password.equalsIgnoreCase(userModel.getPassword())) {
+			
+			String idString = String.valueOf(userModel.getId());
+			String jwt = TokenAuthenticationService.generateToken(idString);
+			
+			System.out.println("JWt: " + jwt);
+			
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, path = "/addUser")
